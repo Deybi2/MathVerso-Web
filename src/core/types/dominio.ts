@@ -5,7 +5,8 @@ export interface Usuario {
     fechaRegistro: Date;
 }
 
-export interface ProgresoGlobal {
+export interface ProgresoUsuario {
+    id: string;
     usuarioId: string;
     categoriasCompletadas: string[];
     leccionesCompletadas: string[];
@@ -21,6 +22,8 @@ export interface EjercicioBase {
     id: string;
     tipo: 'seleccion_multiple' | 'completar_espacios' | 'respuesta_numerica' | 'arrastrar_soltar' | 'texto_libre';
     pregunta: string;
+    opciones?: string[];
+    orden: number; 
     respuestaCorrecta: string | number | string[];
     pistaPoetica: string;
     explicacionIncorrecto: string;
@@ -77,5 +80,19 @@ export interface Categoria {
         icono: string;
         desbloqueado: boolean;
         requisitos: string[];
+    };
+}
+
+export interface EstadoAplicacion {
+    usuario: Usuario | null;
+    progreso: ProgresoUsuario | null;
+    categoriaActual: Categoria | null;
+    leccionActual: Leccion | null;
+    actividadActual: Actividad | null;
+    ejercicioActual: EjercicioConcreto | null;
+    modales: {
+    nivelCompletado: boolean;
+    leccionCompletada: boolean;
+    categoriaCompletada: boolean;
     };
 }
