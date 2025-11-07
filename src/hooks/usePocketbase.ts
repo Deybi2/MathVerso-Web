@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import PocketBase from 'pocketbase';
 
-const pb = new PocketBase("http://192.168.0.7:8090");
-
+const pb = new PocketBase("http://10.56.2.17:8090");
+	
 // Guardar sesión en cookies
 pb.authStore.loadFromCookie(document.cookie);
 pb.authStore.onChange(() => {
