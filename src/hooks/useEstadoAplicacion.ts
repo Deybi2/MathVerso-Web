@@ -56,7 +56,7 @@ export const useEstadoAplicacion = () => {
     };
 
     cargarProgreso();
-    }, [usuario, pb]);
+    }, [usuario, pb],);
 
     const establecerCategoriaActual = useCallback((categoria: Categoria) => {
     setEstado(prev => ({ ...prev, categoriaActual: categoria }));
