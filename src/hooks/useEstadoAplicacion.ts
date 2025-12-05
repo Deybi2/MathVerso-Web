@@ -1,6 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { EstadoAplicacion, Usuario, ProgresoUsuario, type Categoria } from '../core/types/dominio';
+import type { EstadoAplicacion, Usuario, ProgresoUsuario, Categoria } from '../core/types/dominio';
 import { usePocketBase } from './usePocketBase';
+import { RecordModel } from 'pocketbase';
+
+const mapearProgreso = (record: RecordModel): ProgresoUsuario => ({
+    id: record.id,
+    usuarioId: record.usuario,
+    categoriasCompletadas: record.categoriasCompletadas ?? [],
+    leccionesCompletadas: record.leccionesCompletadas ?? [],
+    actividadesCompletadas: record.actividadesCompletadas ?? [],
+    ejerciciosResueltos: record.ejerciciosResueltos ?? [],
+    puntuacionTotal: record.puntuacionTotal ?? 0,
+    poemasColeccionados: record.poemasColeccionados ?? [],
+    logrosDesbloqueados: record.logrosDesbloqueados ?? [],
+    ultimaActividad: new Date(record.ultimaActividad)
+});
+
 
 export const useEstadoAplicacion = () => {
     const { usuario, pb } = usePocketBase();
@@ -32,7 +47,11 @@ export const useEstadoAplicacion = () => {
                 // Intentar cargar progreso desde PocketBase
                 // Nota: Asumo que 'progreso_usuarios' tiene una relación uno a uno con 'usuario'
                 const progresoGuardado = await pb.collection('progreso_usuarios').getFirstListItem(`usuario="${usuario.id}"`);
-                setEstado(prev => ({ ...prev, progreso: progresoGuardado as ProgresoUsuario }));
+                setEstado(prev => ({
+                    ...prev,
+                    progreso: mapearProgreso(progresoGuardado)
+                }));
+
             } catch (error) {
                 // Si el error indica que el registro no fue encontrado (ej. 404), creamos uno nuevo
                 if (error instanceof Error && 'status' in error && error.status === 404) {
@@ -51,7 +70,9 @@ export const useEstadoAplicacion = () => {
                     
                     try {
                         const record = await pb.collection('progreso_usuarios').create(nuevoProgreso);
-                        setEstado(prev => ({ ...prev, progreso: record as ProgresoUsuario }));
+                        setEstado(prev => ({
+                            ...prev,
+                            progreso: record as unknown as ProgresoUsuario }));
                     } catch (createError) {
                         console.error('Error creando progreso:', createError);
                     }

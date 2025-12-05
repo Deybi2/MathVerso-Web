@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 import "./App.css";
@@ -9,7 +10,8 @@ import Navbar from "./components/BarraDeNavegacion";
 import { usePocketBase } from "./hooks/usePocketBase";
 
 // Componente para proteger rutas
-const RutaProtegida = ({ children }: { children: JSX.Element }) => {
+const RutaProtegida = ({ children }: { children: ReactElement }) => {
+
   const { usuario } = usePocketBase();
   return usuario ? children : <Navigate to="/login" />;
 };
