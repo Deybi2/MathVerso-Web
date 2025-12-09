@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { EstadoAplicacion, Usuario, ProgresoUsuario, Categoria } from '../core/types/dominio';
+import type { EstadoAplicacion, ProgresoUsuario, Categoria } from '../core/types/dominio';
 import { usePocketBase } from './usePocketBase';
 import { RecordModel } from 'pocketbase';
 
